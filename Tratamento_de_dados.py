@@ -35,6 +35,13 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
 
     o nome do ficheiro TEM DE SER "missing_values.csv"
     """
+    lista_valores_percentagem = []
+    for i in df.columns:
+        lista_valores_percentagem.append([df.columns[i], df[i].isnull().sum(), df[i].isnull().sum()/len(df[i])])
+    df = pd.DataFrame(lista_valores_percentagem, columns = ['Coluna', 'Missing Values', 'Percentagem'])
+    df.to_csv('missing_values.csv', index = False) 
+    return None
+
 
 def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
     """
