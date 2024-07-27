@@ -13,6 +13,8 @@ import pandas as pd
 import numpy as np
 import math
 import statistics
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import StandardScaler
 
 def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o PCA ao dataset e cria um novo dataset com os novos valores.
     """
@@ -20,6 +22,13 @@ def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o
     deve retornar um csv com o pca aplicado.
     o nome do ficheiro TEM DE SER "pca.csv"
     """
+    pca = PCA(n_components=2)
+    scaler = StandardScaler()
+    df = scaler.fit_transform(df)
+    X_pca = pca.fit_transform(df)
+    df_pca = pd.DataFrame({'PC1': X_pca[:, 0], 'PC2': X_pca[:, 1], 'Class': objetivo})
+    df_pca['Class'] = df_pca['Class'].map({1: 'Vive', 0: 'Morre'})
+    df_pca.to_csv("pca.csv", index=False)
     return None
 
 def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing values do dataset e cria um novo ficheiro.
@@ -35,6 +44,13 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
 
     o nome do ficheiro TEM DE SER "missing_values.csv"
     """
+    lista_valores_percentagem = []
+    for i in df.columns:
+        lista_valores_percentagem.append([df.columns[i], df[i].isnull().sum(), df[i].isnull().sum()/len(df[i])])
+    df = pd.DataFrame(lista_valores_percentagem, columns = ['Coluna', 'Missing Values', 'Percentagem'])
+    df.to_csv('missing_values.csv', index = False) 
+    return None 
+
 
 def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
     """
