@@ -23,7 +23,7 @@ $$
 HVDM(x, y) = \sqrt{\sum_{a=1}^{m} d_a^2 (x_a, y_a)}
 $$
 
-<br><br>
+<br>
 
 $$
 d_a(x, y) = 
@@ -34,20 +34,20 @@ d_a(x, y) =
 \end{cases}
 $$
 
-<br><br>
+<br>
 
 $$
 \text{normalizedDiff}_a(x, y) = \frac{|x - y|}{4\sigma_a}
 $$
 
-<br><br>
+<br>
 
 $$
-\text{{normalizedVdm}}_a(x,y) = \sqrt{ \sum_{c=1}^{C} \left | \frac{N_{{a,x,c}}}{N_{{a,x}}} - \frac{N_{{a,y,c}}}{N_{{a,y}}} \right |^2 }
+\text{normalizedVdm}_a(x,y) = \sqrt{ \sum_{c=1}^{C} \left | \frac{N_{a,x,c}}{N_{a,x}} - \frac{N_{a,y,c}}{N_{a,y}} \right |^2 }
 $$
 
 
-<br><br>
+<br>
 
 where:
 * $x$ and $y$ are passengers;
