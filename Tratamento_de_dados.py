@@ -13,8 +13,10 @@ import pandas as pd
 import numpy as np
 import math
 import statistics
+import lightgbm as lgb
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import StandardScaler
+from sklearn.impute import KNNImputer
 
 
 def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o PCA ao dataset e cria um novo dataset com os novos valores.
@@ -84,11 +86,31 @@ def lgbmregression (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função q
     """
     return None
 
-def Knninputer (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
+def Knninputer (df: pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
     """
     É uma biblioteca de machine learning de sikitlearn.
     Deve ser feita a normalização dos dados e depois a aplicação do knninputer.
     cria um novo ficheiro csv com os novos valores.
     o nome do ficheiro TEM DE SER "KNNinputer.csv"
     """
+    imputer = KNNImputer(n_neighbors=3)
+    scaler = StandardScaler()
+    df = scaler.fit_transform(df)
+    df = imputer.fit_transform(df)
+    df = pd.DataFrame(scaler.inverse_transform(df))
+    df.to_csv("CSV\\KNNinputer.csv", index=True)
+
     return None
+
+
+#para meter no Notebook depois
+"""
+df = pd.read_csv("CSV\\test.csv")
+df.replace({'male': 0, 'female': 1}, inplace=True)
+df.replace({'S': 0, 'C': 1, 'Q': 2}, inplace=True)
+df.drop(columns = ['Name', 'Ticket', 'Cabin', 'PassengerId'], inplace = True)
+Knninputer(df)
+inputDf = pd.read_csv("CSV\\KNNinputer.csv")
+oldDf = pd.read_csv("CSV\\test.csv")
+oldDf['Age'] = inputDf[2]
+"""
