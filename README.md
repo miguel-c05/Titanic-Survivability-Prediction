@@ -29,15 +29,15 @@ $$
 d_a(x, y) = 
 \begin{cases} 
 1, & \text{if } x \text{ or } y \text{ is unknown}; \text{ otherwise...} \\ 
-\text{normalizedVdm}_a(x, y), & \text{if } a \text{ is nominal} \\ 
-\text{normalizedDiff}_a(x, y), & \text{if } a \text{ is linear}
+normalizedVdm_a(x, y), & \text{if } a \text{ is nominal} \\ 
+normalizedDiff_a(x, y), & \text{if } a \text{ is linear}
 \end{cases}
 $$
 
 <br>
 
 $$
-\text{normalizedDiff}_a(x, y) = \frac{|x - y|}{4\sigma_a}
+normalizedDiff_a(x, y) = \frac{|x - y|}{4\sigma_a}
 $$
 
 <br>
