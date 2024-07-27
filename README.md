@@ -42,9 +42,8 @@ $$
 
 <br><br>
 
-
 $$
-\text{normalizedVdm}_a(x,y) = \sqrt{ \sum_{c=1}^{C} \left | \frac{N_{a,x,c}}{N_{a,x}} - \frac{N_{a,y,c}}{N_{a,y}} \right |^2 }
+\text{{normalizedVdm}}_a(x,y) = \sqrt{ \sum_{c=1}^{C} \left | \frac{N_{{a,x,c}}}{N_{{a,x}}} - \frac{N_{{a,y,c}}}{N_{{a,y}}} \right |^2 }
 $$
 
 
