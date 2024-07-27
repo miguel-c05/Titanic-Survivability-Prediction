@@ -48,6 +48,11 @@ def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função
     dado uma coluna do dataset deve criar uma nova coluna binaria que tem 0 se o valor da coluna original for missing e 1 caso contrario.
     A coluna deve ser criada na coluna seguinte à coluna original.
     """
+    missing = (not df[coluna].isnull()).astype(int)
+    newColName = 'Missing ' + df.columns[coluna]
+    
+    df.insert(coluna + 1, newColName, missing)
+
     return None
 
 def lgbmClassifier (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMC ao dataset e cria um novod dataset com os novos valores.
