@@ -29,21 +29,21 @@ $$
 d_a(x, y) = 
 \begin{cases} 
 1, & \text{if } x \text{ or } y \text{ is unknown}; \text{ otherwise...} \\ 
-\text{normalized\_vdm}_a(x, y), & \text{if } a \text{ is nominal} \\ 
-\text{normalized\_diff}_a(x, y), & \text{if } a \text{ is linear}
+\text{normalized}\_\text{vdm}_a(x, y), & \text{if } a \text{ is nominal} \\ 
+\text{normalized}\_\text{diff}_a(x, y), & \text{if } a \text{ is linear}
 \end{cases}
 $$
 
 <br><br>
 
 $$
-\text{normalized\_diff}_a(x, y) = \frac{|x - y|}{4\sigma_a}
+\text{normalized}\_\text{diff}_a(x, y) = \frac{|x - y|}{4\sigma_a}
 $$
 
 <br><br>
 
 $$
-\text{normalized\_vdm}_a(x,y) = \sqrt{ \sum_{c=1}^{C} \left| \frac{N_{a,x,c}}{N_{a,x}} - \frac{N_{a,y,c}}{N_{a,y}} \right|^2 }
+\text{normalized}\_\text{vdm}_a(x,y) = \sqrt{ \sum_{c=1}^{C} \left| \frac{N_{a,x,c}}{N_{a,x}} - \frac{N_{a,y,c}}{N_{a,y}} \right|^2 }
 $$
 
 <br><br>
