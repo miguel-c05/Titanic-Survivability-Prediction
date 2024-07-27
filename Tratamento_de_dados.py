@@ -35,7 +35,6 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
 
     o nome do ficheiro TEM DE SER "missing_values.csv"
     """
-    return None
 
 def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
     """
