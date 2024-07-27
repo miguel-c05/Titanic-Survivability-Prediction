@@ -16,6 +16,7 @@ import statistics
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import StandardScaler
 
+
 def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o PCA ao dataset e cria um novo dataset com os novos valores.
     """
     Deve ser feita a normalização dos dados e depois a aplicação do PCA.
@@ -49,8 +50,7 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
         lista_valores_percentagem.append([df.columns[i], df[i].isnull().sum(), df[i].isnull().sum()/len(df[i])])
     df = pd.DataFrame(lista_valores_percentagem, columns = ['Coluna', 'Missing Values', 'Percentagem'])
     df.to_csv('missing_values.csv', index = False) 
-    return None 
-
+    return None
 
 def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
     """
@@ -59,7 +59,7 @@ def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função
     """
     missing = (not df[coluna].isnull()).astype(int)
     newColName = 'Missing ' + df.columns[coluna]
-    
+
     df.insert(coluna + 1, newColName, missing)
 
     return None
