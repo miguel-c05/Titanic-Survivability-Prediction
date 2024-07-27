@@ -88,4 +88,4 @@ bla bla bla bla bla bla bla bla bla bla bla
 
 
 ## References
-[Wilson, D. R., & Martinez, T. (1997). Improved heterogeneous distance functions. Journal of Artificial Intelligence Research, 6(1) 1-34.](https://jair.org/index.php/jair/article/view/10182)
+[Wilson, D. R., & Martinez, T. (1997). Improved heterogeneous distance functions. Journal of Artificial Intelligence Research, 6(1), 1-34.](https://jair.org/index.php/jair/article/view/10182)
