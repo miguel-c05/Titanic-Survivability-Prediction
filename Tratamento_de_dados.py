@@ -13,6 +13,8 @@ import pandas as pd
 import numpy as np
 import math
 import statistics
+from sklearn.decomposition import PCA
+from sklearn.discriminant_analysis import StandardScaler
 
 def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o PCA ao dataset e cria um novo dataset com os novos valores.
     """
@@ -20,6 +22,13 @@ def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o
     deve retornar um csv com o pca aplicado.
     o nome do ficheiro TEM DE SER "pca.csv"
     """
+    pca = PCA(n_components=2)
+    scaler = StandardScaler()
+    df = scaler.fit_transform(df)
+    X_pca = pca.fit_transform(df)
+    df_pca = pd.DataFrame({'PC1': X_pca[:, 0], 'PC2': X_pca[:, 1], 'Class': objetivo})
+    df_pca['Class'] = df_pca['Class'].map({1: 'Vive', 0: 'Morre'})
+    df_pca.to_csv("Grafico_PCA_OT_MV.csv", index=False)
     return None
 
 def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing values do dataset e cria um novo ficheiro.
