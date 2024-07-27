@@ -28,7 +28,7 @@ def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o
     X_pca = pca.fit_transform(df)
     df_pca = pd.DataFrame({'PC1': X_pca[:, 0], 'PC2': X_pca[:, 1], 'Class': objetivo})
     df_pca['Class'] = df_pca['Class'].map({1: 'Vive', 0: 'Morre'})
-    df_pca.to_csv("Grafico_PCA_OT_MV.csv", index=False)
+    df_pca.to_csv("pca.csv", index=False)
     return None
 
 def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing values do dataset e cria um novo ficheiro.
