@@ -8,7 +8,6 @@ Todas as funçoes têm de ter o seguinte formato:
     def nome_funcao (argumento: tipo de argumento ) -> tipo_retorno: # explicação breve da funçao
         (...) código
         return valor
-    # assinar o autor da funçao / adicionar o nome se fizer alteraçoes
     # se quiserem podem por a complexidade temporal (i.e O(n)) de cada funçao
 """
 
