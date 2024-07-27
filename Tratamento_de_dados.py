@@ -14,17 +14,18 @@ import numpy as np
 import math
 import statistics
 
-def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> pd.DataFrame:#Função que aplica o PCA ao dataset.
+def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o PCA ao dataset e cria um novo dataset com os novos valores.
     """
     Deve ser feita a normalização dos dados e depois a aplicação do PCA.
     deve retornar um csv com o pca aplicado.
+    o nome do ficheiro TEM DE SER "pca.csv"
     """
     return
 
-def missing_values (df: pd.DataFrame) -> pd.DataFrame:#Função que computa os missing values do dataset.
+def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing values do dataset e cria um novo ficheiro.
     """
     por cada coluna do dataset deve ser calculado o nr de missing values a percentagem de missing values.
-    este deve ser o formato de retorno:
+    este deve ser o formato de do novo ficheiro csv:
 
     |  Coluna  | Missing Values | Percentagem |
     |----------|-----------------|-------------|
@@ -32,13 +33,14 @@ def missing_values (df: pd.DataFrame) -> pd.DataFrame:#Função que computa os m
     | Coluna 2 |       2         |     0.2     |
     |   ...    |      ...        |     ...     |
 
+    o nome do ficheiro TEM DE SER "missing_values.csv"
     """
     return
 
 def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
     """
     dado uma coluna do dataset deve criar uma nova coluna binaria que tem 0 se o valor da coluna original for missing e 1 caso contrario.
-    A coluna deve ser cirada nacoluna seguinte a coluna original.
+    A coluna deve ser criada na coluna seguinte à coluna original.
     """
     return None
 
