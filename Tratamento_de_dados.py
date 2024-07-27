@@ -20,7 +20,7 @@ def pca (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o
     deve retornar um csv com o pca aplicado.
     o nome do ficheiro TEM DE SER "pca.csv"
     """
-    return
+    return None
 
 def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing values do dataset e cria um novo ficheiro.
     """
@@ -41,6 +41,7 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
     df = pd.DataFrame(lista_valores_percentagem, columns = ['Coluna', 'Missing Values', 'Percentagem'])
     df.to_csv('missing_values.csv', index = False) 
     return None
+
 
 def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
     """
