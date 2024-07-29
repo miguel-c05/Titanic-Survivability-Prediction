@@ -5,6 +5,15 @@ This project was developed by:
 * Diogo Amaral ([damaral31](https://github.com/damaral31)) - FCUP_IACD:202305187
 * Miguel Carvalho ([miguel-c05](https://github.com/miguel-c05)) - FCUP_IACD:202305229
 
+<div style="padding: 10px;padding-left:5%">
+<img src="_assets_md/Cienciasporto.png" style="float:left; height:75px;width:200px">
+<img src="_assets_md/Feuporto.png" style="float:left ; height:75px; padding-left:20px;width:200px">
+</div>
+
+<div style="clear:both;"></div>
+
+<br>
+
 ## Context and Objective
 This repository serves as the workspace for the Kaggle competition ["Titanic - Machine Learning from Disaster"](https://www.kaggle.com/competitions/titanic), a Machine Learning exercise best suited for beginners, especially those new to the Kaggle platform.
 
