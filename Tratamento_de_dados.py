@@ -76,7 +76,7 @@ def lgbmClassifier (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função q
     return None
 
 
-def lgbmregression (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
+def lgbmRegression (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
     """
     É uma biblioteca de machine learning de lightgbm.
     Deve ser feita a normalização dos dados e depois a aplicação do LGBM.
@@ -98,19 +98,26 @@ def Knninputer (df: pd.DataFrame) -> None:#Função que aplica o LGBMR ao datase
     df = scaler.fit_transform(df)
     df = imputer.fit_transform(df)
     df = pd.DataFrame(scaler.inverse_transform(df))
-    df.to_csv("CSV\\KNNinputer.csv", index=True)
+    df.to_csv("CSV\\KNNinputer.csv", index=False)
 
     return None
 
 
-#para meter no Notebook depois
+#Bloco de codigo para o KNNInputer no Jupyter Notebook
 """
 df = pd.read_csv("CSV\\test.csv")
-df.replace({'male': 0, 'female': 1}, inplace=True)
-df.replace({'S': 0, 'C': 1, 'Q': 2}, inplace=True)
-df.drop(columns = ['Name', 'Ticket', 'Cabin', 'PassengerId'], inplace = True)
+#df.replace({'male': 0, 'female': 1}, inplace=True)
+df["Sex"], sexIndex = pd.factorize(df["Sex"])
+#df.replace({'S': 0, 'C': 1, 'Q': 2}, inplace=True)
+df["Embarked"], embarkedIndex = pd.factorize(df["Embarked"])
+df.drop(columns = ['PassengerId', 'Name', 'Ticket', 'Cabin'], inplace = True)
 Knninputer(df)
 inputDf = pd.read_csv("CSV\\KNNinputer.csv")
-oldDf = pd.read_csv("CSV\\test.csv")
-oldDf['Age'] = inputDf[2]
+
+# In inputDf, columns are displayed by following order
+inputDf.columns = ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]
+inputDf = inputDf.astype({"Pclass": int, "Sex": int, "Age": float, "SibSp": int, "Parch": int, "Fare": float, "Embarked": int})
+inputDf.to_csv("CSV\\KNNinputer.csv", index=False)
+
+# At this point KNNinputer still has categorical values factorized. PLEASE THIS MAY BE CHANGED LATER!
 """
