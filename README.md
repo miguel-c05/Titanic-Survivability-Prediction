@@ -12,7 +12,6 @@ This project was developed by:
 
 <div style="clear:both;"></div>
 
-<br>
 
 ## Context and Objective
 This repository serves as the workspace for the Kaggle competition ["Titanic - Machine Learning from Disaster"](https://www.kaggle.com/competitions/titanic), a Machine Learning exercise best suited for beginners, especially those new to the Kaggle platform.
