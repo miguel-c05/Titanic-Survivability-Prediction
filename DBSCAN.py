@@ -3,88 +3,104 @@ import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
-
-"""
-
-This file contains all the functions that are used to detect outliers in the data 
-anf it's also present a method that deals with the outliers identified in data.
-
-"""
+from sklearn.impute import KNNImputer
+from sklearn.cluster import KMeans
 
 class OUTLIERS:
 
-    def __init__(self, df: pd.DataFrame, goal: pd.DataFrame) -> None:
+    def __init__(self, df: pd.DataFrame) -> None:
         self.df = df
-        self.goal = goal
+
+    def KNNimputer(self) -> pd.DataFrame:
+        """
+        This function is used to input the missing values in the data using KNN. 
+        The function receives the data and returns the data without missing values.
+        """
+        self.df.drop(columns=['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked'], inplace=True, errors='ignore')
+        # Instantiate the KNNImputer
+        imputer = KNNImputer(n_neighbors=5)
     
+        # Fit and transform the DataFrame
+        self.df[:] = imputer.fit_transform(self.df)
+
+        return self.df
+
     def PCAvisualization(self, outliers=None) -> None:
-
         """
-        
-        This function is used to visualize the data in 2D using PCA. This is useful to have some base knowledge about the data
-        and to have some insights about the data distribution to further apply the DBSCAN algorithm. There are two main components,
-        epsilon and min_samples, parameters that are easier to define if we visualize the data first.
-        
+        This function visualizes the data in 2D using PCA. It helps in understanding the data distribution
+        and provides insights for setting the DBSCAN algorithm parameters.
         """
-
         pca = PCA(n_components=2)
-        pca.fit(self.df)
-        pca_data = pca.transform(self.df)
+        pca_data = pca.fit_transform(self.df)
         plt.scatter(pca_data[:, 0], pca_data[:, 1])
         plt.xlabel('x1')
         plt.ylabel('x2')
         plt.title('PCA Visualization')
         if outliers is not None:
-            plt.scatter(outliers['x1'], outliers['x2'], c='red')
+            plt.scatter(outliers[:, 0], outliers[:, 1], c='red')
         plt.show()
 
     def DBSCANparameters(self, epsilon: list, min_samples: list) -> pd.DataFrame:
         """
-        This function is used to apply the DBSCAN algorithm in the data. It's important to define the epsilon and min_samples parameters
-        to have a good performance of the algorithm. The epsilon parameter is used to define the distance between the points to be considered
-        neighbors and the min_samples parameter is used to define the minimum number of neighbors to form a cluster. The function returns
-        the labels of the data and the outliers.
-        Returns a tuple with the epsilon, min_samples, and the list of outliers.
+        This function applies the DBSCAN algorithm to the data using different combinations of epsilon and min_samples.
+        It returns the outliers detected for the selected parameters.
         """
-
         outliers_list = []
+        pca = PCA(n_components=2)
+        pca_data = pca.fit_transform(self.df)
 
         for eps in epsilon:
             for min_s in min_samples:
                 dbscan = DBSCAN(eps=eps, min_samples=min_s)
                 labels = dbscan.fit_predict(self.df)
-                outliers = self.df[labels == -1]
+                outliers = pca_data[labels == -1]
                 outliers_list.append((eps, min_s, outliers))
                 print(f'Epsilon: {eps}, Min_samples: {min_s}, Number of outliers: {len(outliers)}')
                 self.PCAvisualization(outliers)
+        
         print('Choose epsilon and min_samples to return outliers')
         epsilon = float(input('Epsilon: '))
         min_samples = int(input('Min_samples: '))
-        for tuple_ in outliers_list:
-            if tuple_[0] == epsilon and tuple_[1] == min_samples:
-                outliers = pd.DataFrame(tuple_[2], columns=self.df.columns)
-                return outliers
-    
+        for eps, min_s, outliers in outliers_list:
+            if eps == epsilon and min_s == min_samples:
+                outliers_indices = np.where(labels == -1)[0]
+                outliers_df = self.df.iloc[outliers_indices]
+                return outliers_df
+
     def Kmeans(self, outliers: pd.DataFrame) -> pd.DataFrame:
         """
-        Se acharem boa ideia, retornar a media dos k mais proximos em PCA ao outlier em questao.
+        This function handles outliers by replacing them with the mean of the k nearest neighbors.
         """
+        pca = PCA(n_components=2)
+        pca_data = pca.fit_transform(self.df)
+        kmeans = KMeans(n_clusters=5)
+        kmeans.fit(pca_data)
+        clusters = kmeans.predict(pca_data)
+        
+        for idx in outliers.index:
+            cluster = clusters[idx]
+            cluster_indices = np.where(clusters == cluster)[0]
+            cluster_points = self.df.iloc[cluster_indices]
+            mean_values = cluster_points.mean()
+            self.df.iloc[idx] = mean_values
+        
+        return self.df
 
-    def outliersTreatment(self, outliers: pd.DataFrame, method:str) -> pd.DataFrame:
-
+    def outliersTreatment(self, outliers: pd.DataFrame, method: str) -> pd.DataFrame:
         """
-        This function is used to deal with the outliers identified in the data. The function receives the outliers and returns
-        the data without the outliers. The outliers are identified by the DBSCAN algorithm.
+        This function deals with the outliers identified in the data. It can either remove the outliers or
+        handle them using KMeans.
         """
-
-        outliers_index = outliers.index
         if method == 'remove':
-            goal = self.df.drop(outliers_index)
+            return self.df.drop(outliers.index)
         elif method == 'kmeans':
-            goal = self.Kmeans(outliers)
+            return self.Kmeans(outliers)
         else:
-            while True:
-                method = input('Invalid method. Choose between remove and kmeans: ')
-                if method == 'remove' or method == 'kmeans':
-                    break
-        return goal
+            raise ValueError("Invalid method. Choose between 'remove' and 'kmeans'.")
+
+# Example usage
+df = pd.read_csv('CSV\\train.csv')
+outliers_detector = OUTLIERS(df)
+cleaned_df = outliers_detector.KNNimputer()
+outliers = outliers_detector.DBSCANparameters([30, 50, 70], [5, 10, 15])
+treated_df = outliers_detector.outliersTreatment(outliers, method='remove')
