@@ -78,13 +78,13 @@ class HVDM:
             paciente = self.df[coluna][i]
             if paciente == x_v:
                 Valores[0] += 1
-                if self.objetivo[i] == 0:
+                if self.objetivo[0][i] == 0:
                     Valores[2] += 1
                 else:
                     Valores[4] += 1
             if paciente == y_v:# É importante que seja IF e não ELIF porque mesmo que x=y existe o caso em que x_c != y_c 
                 Valores[1] += 1
-                if self.objetivo[i] == 0:
+                if self.objetivo[0][i] == 0:
                     Valores[3] += 1
                 else:
                     Valores[5] += 1
