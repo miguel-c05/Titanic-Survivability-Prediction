@@ -38,9 +38,9 @@ class HVDM:
         Se a coluna for numerica retorna a função normalized_diff.
         Se a coluna for categorica retorna a função normalized_vdm.
         """
-        if self.df[coluna][x] == None or self.df[coluna][y] == None:
+        if self.df.iloc[x , coluna] == None or self.df.iloc[y , coluna] == None:
             return 1        
-        if self.df[coluna] == 'Age' or self.df[coluna] == 'Fare': # SUJEITO A MUDANÇA
+        if self.df.iloc[: , coluna] == 'Age' or self.df.iloc[: , coluna] == 'Fare': # SUJEITO A MUDANÇA
             return self.normalized_diff(x, y)
         return self.normalized_vdm(x, y, coluna)
     
@@ -71,20 +71,20 @@ class HVDM:
         Esta funçao é chamada para todos os segundos casos do HVDM uma vez e é complementar a normalized_vdm.
         """
         Valores = [0, 0, 0, 0, 0, 0]# [Na,x, Na,y, Na,x,0 Na,y,0 Na,x,1 Na,y,1]
-        x_v = self.df[coluna][x]
-        y_v = self.df[coluna][y]
+        x_v = self.df.iloc[x , coluna]
+        y_v = self.df.iloc[y , coluna]
 
         for i in range(len(self.df)):
-            paciente = self.df[coluna][i]
+            paciente = self.df.iloc[i , coluna]
             if paciente == x_v:
                 Valores[0] += 1
-                if self.objetivo[0][i] == 0:
+                if self.objetivo.iloc[i,0] == 0:
                     Valores[2] += 1
                 else:
                     Valores[4] += 1
             if paciente == y_v:# É importante que seja IF e não ELIF porque mesmo que x=y existe o caso em que x_c != y_c 
                 Valores[1] += 1 
-                if self.objetivo[0][i] == 0:
+                if  self.objetivo.iloc[i,0] == 0:
                     Valores[3] += 1
                 else:
                     Valores[5] += 1
