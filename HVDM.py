@@ -26,10 +26,10 @@ class HVDM:
         Calcula a distancia entre dois passageiros.
         Deve fazer um loop em cada atributo do dataset e calcular a distancia entre os dois passageiros dessa coluna e depois somar tudo.
         """
-        contador=0
+        contador = 0
         for i in self.df.columns:
-            contador+=(self.distancias(x, y, i))**2
-        return round(math.sqrt(contador), 2)# arredondar para 1 casas decimal
+            contador += (self.distancias(x, y, i))** 2
+        return round( math.sqrt(contador), 2)# arredondar para 1 casas decimal
         
     def distancias( self , x: int , y: int , coluna: int ) -> float: # calcula a distancia entre dois passageiros de uma coluna
         """
@@ -38,7 +38,7 @@ class HVDM:
         Se a coluna for numerica retorna a função normalized_diff.
         Se a coluna for categorica retorna a função normalized_vdm.
         """
-        if self.df[coluna][x]==None or self.df[coluna][y]==None:
+        if self.df[coluna][x] == None or self.df[coluna][y] == None:
             return 1        
         if self.df[coluna] == 'Age' or self.df[coluna] == 'Fare': # SUJEITO A MUDANÇA
             return self.normalized_diff(x, y)
@@ -83,7 +83,7 @@ class HVDM:
                 else:
                     Valores[4] += 1
             if paciente == y_v:# É importante que seja IF e não ELIF porque mesmo que x=y existe o caso em que x_c != y_c 
-                Valores[1] += 1
+                Valores[1] += 1 
                 if self.objetivo[0][i] == 0:
                     Valores[3] += 1
                 else:
