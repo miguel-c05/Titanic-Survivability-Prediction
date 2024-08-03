@@ -21,41 +21,48 @@ class HVDM:
         self.df = df
         self.objetivo = objetivo
 
-    def HVDM(self, x:int, y:int) -> float:# calcula a distancia entre dois passageiros
+    def HVDM(self , x: int , y: int ) -> float:# calcula a distancia entre dois passageiros
         """
         Calcula a distancia entre dois passageiros.
         Deve fazer um loop em cada atributo do dataset e calcular a distancia entre os dois passageiros dessa coluna e depois somar tudo.
         """
-        return
+        contador = 0
+        for i in self.df.columns:
+            contador += (self.distancias(x, y, i))** 2
+        return round( math.sqrt(contador), 2)# arredondar para 1 casas decimal
         
-    def distancias( self, x:int, y:int, coluna:int ) -> float: # calcula a distancia entre dois passageiros de uma coluna
+    def distancias( self , x: int , y: int , coluna: int ) -> float: # calcula a distancia entre dois passageiros de uma coluna
         """
         Calcula a distancia entre dois valores de uma coluna.
         se x e y forem desconhecidos retorna 1.
         Se a coluna for numerica retorna a função normalized_diff.
         Se a coluna for categorica retorna a função normalized_vdm.
         """
-        return
+        if self.df[coluna][x] == None or self.df[coluna][y] == None:
+            return 1        
+        if self.df[coluna] == 'Age' or self.df[coluna] == 'Fare': # SUJEITO A MUDANÇA
+            return self.normalized_diff(x, y)
+        return self.normalized_vdm(x, y, coluna)
     
-    def normalized_vdm(self, x: int , y: int, coluna: int) -> float:# segundo caso do HVDM e ambas têm de ser categoricas
+    def normalized_vdm(self , x: int , y: int, coluna: int ) -> float:# segundo caso do HVDM e ambas têm de ser categoricas
         """
         fazer o calculo do VDM normalizado dado no papel que vimos.
         todos os valores vao ser calculados e guardados numa lista pela função comp_pacientes_pela_coluna.
         para poupar tempo o resultado desta funçao é sempre 0 quando x=y E O RESULTADO DE X=Y.
         """
-        return
+        return 
     
-    def normalized_diff(self, x: int , y: int) -> float:# terceio caso do HVDM e ambas têm de ser numericas/continuas
+    def normalized_diff(self , x: int , y: int ) -> float:# terceio caso do HVDM e ambas têm de ser numericas/continuas
         """
         Calcula a diferença normalizada entre dois valores.
-        Ela é dada no papel que vimos.
+        Ela é dada no papel que vimos.<
         É simples de implementar.
         Esta função é chamada dentro da função hvdm.
         O valor do std (standard deviation) é assumido ja calculado pela função standard_deviation e os seus valores estão armazenados na linha 2 do dataset.
         """
         return    
     
-    def comp_pacientes_pela_coluna(self, x:int, y:int, coluna:int ) -> list:#calculo dos acontecimentos de Na,x Na,y Na,x,0 Na,y,0 Na,x,1 Na,y,1
+    def comp_pacientes_pela_coluna(self , x: int , y: int , coluna: int ) -> list:#calculo dos acontecimentos de Na,x Na,y Na,x,0 Na,y,0 Na,x,1 Na,y,1
         """
         primeiro deve contar quantas vezes o valor x, y aparece na coluna e depois contar as vezes que x, y aparece na coluna e tem o mesmo resultado, para ambos os resultados (vive ou morre). 
         Guardar os valores numa lista e retornar a lista.
@@ -63,9 +70,27 @@ class HVDM:
         tentar fazer num unico loop.
         Esta funçao é chamada para todos os segundos casos do HVDM uma vez e é complementar a normalized_vdm.
         """
-        return
+        Valores = [0, 0, 0, 0, 0, 0]# [Na,x, Na,y, Na,x,0 Na,y,0 Na,x,1 Na,y,1]
+        x_v = self.df[coluna][x]
+        y_v = self.df[coluna][y]
 
-    def standard_deviation (self) -> float: # calcula o desvio padrão do dataframe
+        for i in range(len(self.df)):
+            paciente = self.df[coluna][i]
+            if paciente == x_v:
+                Valores[0] += 1
+                if self.objetivo[0][i] == 0:
+                    Valores[2] += 1
+                else:
+                    Valores[4] += 1
+            if paciente == y_v:# É importante que seja IF e não ELIF porque mesmo que x=y existe o caso em que x_c != y_c 
+                Valores[1] += 1 
+                if self.objetivo[0][i] == 0:
+                    Valores[3] += 1
+                else:
+                    Valores[5] += 1
+        return Valores
+
+    def standard_deviation (self) -> None: # calcula o desvio padrão do dataframe
         """
         Calcula o desvio padrão de um dataset.
         Pode-se utilizar a função statistics.stdev() da biblioteca statistics ou so numpy.std() (mais eficiente de perferencia ).
@@ -73,4 +98,9 @@ class HVDM:
         todas as colunas que nao forem numericas so assume se que o std é 0.
         esta funçao é complementar e só é chamada 1 vez. 
         """
-        return 
+        for i in self.df.columns:
+            if i == "Age" or i == "Fare":# SUJEITO A MUDANÇA
+                self.df.loc[1, i] = np.std(self.df[i])
+            else:
+                self.df.loc[1, i] = 0
+        return None
