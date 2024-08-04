@@ -64,25 +64,51 @@ def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função
 
     return None
 
-def lgbmClassifier (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMC ao dataset e cria um novod dataset com os novos valores.
+def missing_values_for_output(df: pd.DataFrame ) -> pd.DataFrame:
     """
-    É uma biblioteca de machine learning de lightgbm.
-    Deve ser feita a normalização dos dados e depois a aplicação do LGBM.
-    cria um novo ficheiro csv com os novos valores.
-    o nome do ficheiro TEM DE SER "lgbmC.csv"
-    """
-    return None
+    The objective of this func is to determinate if the missing values have any impact on the survival rate of the passengers.
+    This function should return a DataFrame with the following structure:
 
+    |  Column  | Survived_filled | Died_filled | Missing Values | Survived_filled (%) | Died_Filled (%) | Missing Values (%) | Survived_missing | Died_missing | Survived_missing (%) | Died_missing (%) |
+    |----------|-----------------|-------------|----------------|---------------------|-----------------|--------------------|------------------|--------------|----------------------|------------------|
+    | Column 1 |        0        |      0      |        0       |           0         |        0        |          0         |         0        |       0      |          0           |         0        | 
+    | Column 2 |        0        |      0      |        0       |           0         |        0        |          0         |         0        |       0      |          0           |         0        | 
 
-def lgbmregression (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
     """
-    É uma biblioteca de machine learning de lightgbm.
-    Deve ser feita a normalização dos dados e depois a aplicação do LGBM.
-    Dar fit ao modelo e prever os valores.
-    cria um novo ficheiro csv com os novos valores.
-    o nome do ficheiro TEM DE SER "lgbmR.csv"
-    """
-    return None
+    lista_valores_percentagem = []
+    for col in df.columns:
+        if df[col].isnull().sum() > 0:
+
+            missing_values = df[col].isnull().sum()
+            missing_values_percentage = missing_values / len(df[col])
+
+            survived_filled = df.loc[(df['Survived'] == 1) & (~df[col].isnull())].shape[0]
+            survived_percentage = survived_filled / (len(df[col])-missing_values)
+
+            died_filled =  df.loc[(df['Survived'] == 0) & (~df[col].isnull())].shape[0]
+            died_percentage = died_filled / (len(df[col])-missing_values)
+            
+            survived_missing = df.loc[(df['Survived'] == 1) & (df[col].isnull())].shape[0]
+            survived_missing_percentage = survived_missing / missing_values
+
+            died_missing = df.loc[(df['Survived'] == 0) & (df[col].isnull())].shape[0]
+            died_missing_percentage = died_missing / missing_values
+            
+            lista_valores_percentagem.append([
+                col, survived_filled, died_filled, missing_values, 
+                survived_percentage, died_percentage, missing_values_percentage, 
+                survived_missing, died_missing, survived_missing_percentage, died_missing_percentage
+            ])
+    df_missing_values = pd.DataFrame(
+        lista_valores_percentagem, 
+        columns=[
+            'Column', 'Survived_filled', 'Died_filled', 'Missing Values', 
+            'Survived_filled (%)', 'Died_Filled (%)', 'Missing Values (%)', 'Survived_missing', 'Died_missing',
+            'Survived_missing (%)', 'Died_missing (%)' 
+        ]
+    )
+    return df_missing_values
+
 
 def Knninputer (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
     """
