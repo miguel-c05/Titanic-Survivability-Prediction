@@ -5,13 +5,21 @@ This project was developed by:
 * Diogo Amaral ([damaral31](https://github.com/damaral31)) - FCUP_IACD:202305187
 * Miguel Carvalho ([miguel-c05](https://github.com/miguel-c05)) - FCUP_IACD:202305229
 
+<div style="padding: 10px;padding-left:5%">
+<img src="_assets_md/Cienciasporto.png" style="float:left; height:75px;width:200px">
+<img src="_assets_md/Feuporto.png" style="float:left ; height:75px; padding-left:20px;width:200px">
+</div>
+
+<div style="clear:both;"></div>
+
+
 ## Context and Objective
 This repository serves as the workspace for the Kaggle competition ["Titanic - Machine Learning from Disaster"](https://www.kaggle.com/competitions/titanic), a Machine Learning exercise best suited for beginners, especially those new to the Kaggle platform.
 
 The aim of the competition at hand is to study a Database of passengers aboard the Titanic and train a Machine Learning model on any relevant information extracted in order to be able to predict whether a passenger is likely to survive the ship's wreck or not. All of this with the maximum accuracy possible, of course.
 
 ## The Data
-In order to train the model a large enough amount of information is needed. As such, Kaggle gives the participants of this competition a dataset ([train.csv]()) on which to work, regarding passenger's names, age, sex and nº of siblings, among others. It also contains, however, missing values as well as outliers, both of which harm data analysis and model training. Later, we will explain how such cases were handled.
+In order to train the model a large enough amount of information is needed. As such, Kaggle gives the participants of this competition a dataset ([train.csv](CSV\train.csv)) on which to work, regarding passenger's names, age, sex and nº of siblings, among others. It also contains, however, missing values as well as outliers, both of which harm data analysis and model training. Later, we will explain how such cases were handled.
 
 ## Expectations
 On a first inspection of the facts, women and children will most likely have a higher chance of survival, simply because they were groups of people prioritized for evacuation and rescue. Some cabins may also see a survivability increase solely due to its geographical location on the ship.
