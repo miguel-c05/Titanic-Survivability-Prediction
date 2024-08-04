@@ -13,7 +13,6 @@ import pandas as pd
 import numpy as np
 import math
 import statistics
-import lightgbm as lgb
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import KNNImputer
