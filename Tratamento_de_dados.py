@@ -53,15 +53,15 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
     df.to_csv('missing_values.csv', index = False) 
     return None
 
-def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
+def criar_coluna_missing_values (df: pd.DataFrame, coluna:str) -> None:#Função que cria uma coluna binaria com missing values.
     """
-    dado uma coluna do dataset deve criar uma nova coluna binaria que tem 0 se o valor da coluna original for missing e 1 caso contrario.
+    dado uma coluna do dataset deve criar uma nova coluna binaria que tem 1 se o valor da coluna original for missing e 0 caso contrario.
     A coluna deve ser criada na coluna seguinte à coluna original.
     """
-    missing = (not df[coluna].isnull()).astype(int)
-    newColName = 'Missing ' + df.columns[coluna]
-
-    df.insert(coluna + 1, newColName, missing)
+    missing = ( df[coluna].isnull()).astype(int)
+    newColName = 'Missing ' + coluna
+    numero_coluna = df.columns.get_loc(coluna)
+    df.insert(numero_coluna + 1, newColName, missing)
 
     return None
 
