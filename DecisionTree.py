@@ -49,6 +49,7 @@ class DecisionTree:
                 for min_samples_split in min_samples_splitList:
                     for min_samples_leaf in min_samples_leafList:
                         acurracy, recall, precision, specificity, f1 = self.train(criterion, max_depth, min_samples_split, min_samples_leaf)
+                        # talvez escolher outra forma de escolher quais os melhores parametros???
                         if acurracy > best_acurracy:
                             best_acurracy = acurracy
                             best_params = [criterion, max_depth, min_samples_split, min_samples_leaf]
