@@ -31,7 +31,7 @@ class HVDM:
             contador += (self.distancias(x, y, i))** 2
         return round( math.sqrt(contador), 2)# arredondar para 1 casas decimal
         
-    def distancias( self , x: int , y: int , coluna: int ) -> float: # calcula a distancia entre dois passageiros de uma coluna
+    def distancias(self , x: int , y: int , coluna: int) -> float:# calcula a distancia entre dois passageiros de uma coluna
         """
         Calcula a distancia entre dois valores de uma coluna.
         se x e y forem desconhecidos retorna 1.
@@ -44,15 +44,25 @@ class HVDM:
             return self.normalized_diff(x, y)
         return self.normalized_vdm(x, y, coluna)
     
-    def normalized_vdm(self , x: int , y: int, coluna: int ) -> float:# segundo caso do HVDM e ambas têm de ser categoricas
+    def normalized_vdm(self , x: int , y: int, coluna: int) -> float:# segundo caso do HVDM e ambas têm de ser categoricas
         """
         fazer o calculo do VDM normalizado dado no papel que vimos.
         todos os valores vao ser calculados e guardados numa lista pela função comp_pacientes_pela_coluna.
         para poupar tempo o resultado desta funçao é sempre 0 quando x=y E O RESULTADO DE X=Y.
         """
-        return 
+
+        if x == y:
+            return 0
+        else:
+            values = self.comp_pacientes_pela_coluna(x, y, coluna)# [Na,x, Na,y, Na,x,0 Na,y,0 Na,x,1 Na,y,1]
+            ratio_x_0, ratio_y_0 = values[2] / values[0], values[3] / values[1]# Na,x,0 / Na,x  ,  Na,y,0 / Na,y
+            ratio_x_1, ratio_y_1 = values[4] / values[0], values[5] / values[1]# Na,x,1 / Na,x  ,  Na,y,1 / Na,y
+            result_0 = np.abs(ratio_x_0 - ratio_y_0)
+            result_1 = np.abs(ratio_x_1 - ratio_y_1)
+
+        return np.sqrt(np.power((result_0 + result_1), 2))
     
-    def normalized_diff(self , x: int , y: int , col: str) -> float:# terceio caso do HVDM e ambas têm de ser numericas/continuas
+    def normalized_diff(self , x: int , y: int , col: int) -> float:# terceio caso do HVDM e ambas têm de ser numericas/continuas
         """
         Calcula a diferença normalizada entre dois valores.
         Ela é dada no papel que vimos.<
@@ -61,13 +71,13 @@ class HVDM:
         O valor do std (standard deviation) é assumido ja calculado pela função standard_deviation e os seus valores estão armazenados na linha 2 do dataset.
         """
         
-        diff = abs(x - y)
-        std_dev = self.df[col].std()
+        diff = np.abs(x - y)
+        std_dev = self.df.iloc[1, col]
         norm_diff = diff / (4 * std_dev)
         
         return norm_diff
     
-    def comp_pacientes_pela_coluna(self , x: int , y: int , coluna: int ) -> list:#calculo dos acontecimentos de Na,x Na,y Na,x,0 Na,y,0 Na,x,1 Na,y,1
+    def comp_pacientes_pela_coluna(self , x: int , y: int , coluna: int) -> list:#calculo dos acontecimentos de Na,x Na,y Na,x,0 Na,y,0 Na,x,1 Na,y,1
         """
         primeiro deve contar quantas vezes o valor x, y aparece na coluna e depois contar as vezes que x, y aparece na coluna e tem o mesmo resultado, para ambos os resultados (vive ou morre). 
         Guardar os valores numa lista e retornar a lista.
@@ -105,7 +115,7 @@ class HVDM:
         """
         for i in self.df.columns:
             if i == "Age" or i == "Fare":# SUJEITO A MUDANÇA
-                self.df.loc[1, i] = np.std(self.df[i])
+                self.df.loc[1, i] = np.std(self.df[i])# Miguel -- Nao seria melhor aplicar na 1a linha do df (index 0)?
             else:
                 self.df.loc[1, i] = 0
         return None
