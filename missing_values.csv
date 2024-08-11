@@ -1,0 +1,12 @@
+Column,Missing Values,Percentage
+PassengerId,0,0.0
+Pclass,0,0.0
+Name,0,0.0
+Sex,0,0.0
+Age,86,0.20574162679425836
+SibSp,0,0.0
+Parch,0,0.0
+Ticket,0,0.0
+Fare,1,0.0023923444976076554
+Cabin,327,0.7822966507177034
+Embarked,0,0.0

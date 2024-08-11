@@ -13,7 +13,6 @@ import pandas as pd
 import numpy as np
 import math
 import statistics
-import lightgbm as lgb
 from sklearn.decomposition import PCA
 from sklearn.discriminant_analysis import StandardScaler
 from sklearn.impute import KNNImputer
@@ -54,63 +53,101 @@ def missing_values (df: pd.DataFrame) -> None:#Função que computa os missing v
     df.to_csv('missing_values.csv', index = False) 
     return None
 
-def criar_coluna_missing_values (df: pd.DataFrame, coluna:int) -> None:#Função que cria uma coluna binaria com missing values.
+def criar_coluna_missing_values (df: pd.DataFrame, coluna:str) -> None:#Função que cria uma coluna binaria com missing values.
     """
-    dado uma coluna do dataset deve criar uma nova coluna binaria que tem 0 se o valor da coluna original for missing e 1 caso contrario.
+    dado uma coluna do dataset deve criar uma nova coluna binaria que tem 1 se o valor da coluna original for missing e 0 caso contrario.
     A coluna deve ser criada na coluna seguinte à coluna original.
     """
-    missing = (not df[coluna].isnull()).astype(int)
-    newColName = 'Missing ' + df.columns[coluna]
-
-    df.insert(coluna + 1, newColName, missing)
+    missing = ( df[coluna].isnull()).astype(int)
+    newColName = 'Missing ' + coluna
+    numero_coluna = df.columns.get_loc(coluna)
+    df.insert(numero_coluna + 1, newColName, missing)
 
     return None
 
-def lgbmClassifier (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMC ao dataset e cria um novod dataset com os novos valores.
+def missing_values_for_output(df: pd.DataFrame ) -> pd.DataFrame:
     """
-    É uma biblioteca de machine learning de lightgbm.
-    Deve ser feita a normalização dos dados e depois a aplicação do LGBM.
-    cria um novo ficheiro csv com os novos valores.
-    o nome do ficheiro TEM DE SER "lgbmC.csv"
+    The objective of this func is to determinate if the missing values have any impact on the survival rate of the passengers.
+    This function should return a DataFrame with the following structure:
+
+    |  Column  | Survived_filled | Died_filled | Missing Values | Survived_filled (%) | Died_Filled (%) | Missing Values (%) | Survived_missing | Died_missing | Survived_missing (%) | Died_missing (%) |
+    |----------|-----------------|-------------|----------------|---------------------|-----------------|--------------------|------------------|--------------|----------------------|------------------|
+    | Column 1 |        0        |      0      |        0       |           0         |        0        |          0         |         0        |       0      |          0           |         0        | 
+    | Column 2 |        0        |      0      |        0       |           0         |        0        |          0         |         0        |       0      |          0           |         0        | 
+
     """
+    lista_valores_percentagem = []
+    for col in df.columns:
+        if df[col].isnull().sum() > 0:
+
+            missing_values = df[col].isnull().sum()
+            missing_values_percentage = missing_values / len(df[col])
+
+            survived_filled = df.loc[(df['Survived'] == 1) & (~df[col].isnull())].shape[0]
+            survived_percentage = survived_filled / (len(df[col])-missing_values)
+
+            died_filled =  df.loc[(df['Survived'] == 0) & (~df[col].isnull())].shape[0]
+            died_percentage = died_filled / (len(df[col])-missing_values)
+            
+            survived_missing = df.loc[(df['Survived'] == 1) & (df[col].isnull())].shape[0]
+            survived_missing_percentage = survived_missing / missing_values
+
+            died_missing = df.loc[(df['Survived'] == 0) & (df[col].isnull())].shape[0]
+            died_missing_percentage = died_missing / missing_values
+            
+            lista_valores_percentagem.append([
+                col, survived_filled, died_filled, missing_values, 
+                survived_percentage, died_percentage, missing_values_percentage, 
+                survived_missing, died_missing, survived_missing_percentage, died_missing_percentage
+            ])
+    df_missing_values = pd.DataFrame(
+        lista_valores_percentagem, 
+        columns=[
+            'Column', 'Survived_filled', 'Died_filled', 'Missing Values', 
+            'Survived_filled (%)', 'Died_Filled (%)', 'Missing Values (%)', 'Survived_missing', 'Died_missing',
+            'Survived_missing (%)', 'Died_missing (%)' 
+        ]
+    )
+    return df_missing_values
+
+def extra_col_ticket(df: pd.DataFrame) -> None:
+    """
+    The objective of this function is from the "Ticket" atribute create 2 new columns with the first one the word of the tiket.
+    the second column is the number of the ticket.
+    if the ticket is only a number the first column should be filled with "N" and the second column with the number.  
+    """
+    df['Ticket'] = df['Ticket'].apply(lambda x: x.split(' '))
+    df['Ticket Class'] = df['Ticket'].apply(lambda x: x[0] if len(x) > 1 else 'N')
+    df['Ticket Number'] = df['Ticket'].apply(lambda x: x[1] if len(x) > 1 else x[0])
+    """turn_name_col_into_ASCII(df, 'Ticket Class')"""
     return None
 
+def turn_name_col_into_ASCII(df: pd.DataFrame, column:str ) -> None:
+    """
+    O comentado é o que torna a coluna em ASCII.
+    the objective of the func is to retrieve the last name of the passengers then convert the name column to ASCII format.
+    """
 
-def lgbmregression (df: pd.DataFrame, objetivo:pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
-    """
-    É uma biblioteca de machine learning de lightgbm.
-    Deve ser feita a normalização dos dados e depois a aplicação do LGBM.
-    Dar fit ao modelo e prever os valores.
-    cria um novo ficheiro csv com os novos valores.
-    o nome do ficheiro TEM DE SER "lgbmR.csv"
-    """
-    return None
+    df[column] = df[column].apply(lambda x: x.split(',')[0])# select the last name of the passenger
+    """df[column] = df[column].apply(lambda x: ''.join(str(ord(c)) for c in x))# convert the name to ASCII format"""
+    return df
+
 
 def Knninputer (df: pd.DataFrame) -> None:#Função que aplica o LGBMR ao dataset e cria um novo dataset com os novos valores.
     """
-    É uma biblioteca de machine learning de sikitlearn.
+    É uma biblioteca de sikitlearn.
     Deve ser feita a normalização dos dados e depois a aplicação do knninputer.
     cria um novo ficheiro csv com os novos valores.
-    o nome do ficheiro TEM DE SER "KNNinputer.csv"
+    o nome do ficheiro TEM DE SER "KNNinputer.csv
     """
-    imputer = KNNImputer(n_neighbors=3)
+    colunas_salvas = df.columns
+    imputer = KNNImputer(n_neighbors=5)
     scaler = StandardScaler()
     df = scaler.fit_transform(df)
     df = imputer.fit_transform(df)
-    df = pd.DataFrame(scaler.inverse_transform(df))
-    df.to_csv("CSV\\KNNinputer.csv", index=True)
-
+    df = pd.DataFrame(scaler.inverse_transform(df), columns = colunas_salvas)
+    for col in df.columns:
+        if col not in ['Age', 'Fare']:
+            df[col] = df[col].astype(int)
+    df.to_csv("KNNinputer.csv", index=False)
     return None
-
-
-#para meter no Notebook depois
-"""
-df = pd.read_csv("CSV\\test.csv")
-df.replace({'male': 0, 'female': 1}, inplace=True)
-df.replace({'S': 0, 'C': 1, 'Q': 2}, inplace=True)
-df.drop(columns = ['Name', 'Ticket', 'Cabin', 'PassengerId'], inplace = True)
-Knninputer(df)
-inputDf = pd.read_csv("CSV\\KNNinputer.csv")
-oldDf = pd.read_csv("CSV\\test.csv")
-oldDf['Age'] = inputDf[2]
-"""
