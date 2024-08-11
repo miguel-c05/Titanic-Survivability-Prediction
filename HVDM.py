@@ -52,7 +52,7 @@ class HVDM:
         """
         return 
     
-    def normalized_diff(self , x: int , y: int ) -> float:# terceio caso do HVDM e ambas têm de ser numericas/continuas
+    def normalized_diff(self , x: int , y: int , col: str) -> float:# terceio caso do HVDM e ambas têm de ser numericas/continuas
         """
         Calcula a diferença normalizada entre dois valores.
         Ela é dada no papel que vimos.<
@@ -60,7 +60,12 @@ class HVDM:
         Esta função é chamada dentro da função hvdm.
         O valor do std (standard deviation) é assumido ja calculado pela função standard_deviation e os seus valores estão armazenados na linha 2 do dataset.
         """
-        return    
+        
+        diff = abs(x - y)
+        std_dev = self.df[col].std()
+        norm_diff = diff / (4 * std_dev)
+        
+        return norm_diff
     
     def comp_pacientes_pela_coluna(self , x: int , y: int , coluna: int ) -> list:#calculo dos acontecimentos de Na,x Na,y Na,x,0 Na,y,0 Na,x,1 Na,y,1
         """
