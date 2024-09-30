@@ -51,7 +51,7 @@ class HVDM:
         para poupar tempo o resultado desta funçao é sempre 0 quando x=y E O RESULTADO DE X=Y.
         """
 
-        if x == y:
+        if x == y and self.df.iloc[x, coluna] == self.df.iloc[x, coluna]: # se x=y e coluna(x)=coluna(y)
             return 0
         else:
             values = self.comp_pacientes_pela_coluna(x, y, coluna)# [Na,x, Na,y, Na,x,0 Na,y,0 Na,x,1 Na,y,1]
