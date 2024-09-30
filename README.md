@@ -75,7 +75,7 @@ Finally, having the distances between all passengers, a missing value in a said 
 bla bla bla bla bla bla bla bla bla bla bla bla
 
 
-## Machine Leaning Algorithm
+## Machine Learning Algorithm
 bla bla bla bla bla bla bla bla bla bla bla bla
 
 ### Alg. 1
